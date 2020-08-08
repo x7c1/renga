@@ -34,8 +34,8 @@ jobs:
     steps:
       - run: cargo build --release
       - run: |
-        ls -alh target/release
-        file target/release/renga-service
+          ls -alh target/release
+          file target/release/renga-service
 
 #   link-statically:
 #     needs: cargo-test
