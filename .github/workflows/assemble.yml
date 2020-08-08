@@ -10,11 +10,10 @@ on:
     branches:
       - '*'
 jobs:
-  cargo:
+  cargo-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: actions/cache@v2
         with:
           path: |
@@ -28,4 +27,37 @@ jobs:
           toolchain: stable
 
       - run: cargo test
+
+  link-dynamically:
+    needs: cargo-test
+    runs-on: ubuntu-latest
+    steps:
       - run: cargo build --release
+      - run: |
+        ls -alh target/release
+        file target/release/renga-service
+
+#   link-statically:
+#     needs: cargo-test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: actions/cache@v2
+#         with:
+#           path: |
+#             ~/.cargo/registry
+#             ~/.cargo/git
+#             target
+#           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+#
+#       - uses: actions-rs/toolchain@v1
+#         with:
+#           toolchain: stable
+#
+#       - run: |
+#         cargo build \
+#           --release \
+#           --target=x86_64-unknown-linux-musl
+#       - run: |
+#         ls -alh target/release
+#         file target/release/renga-service
