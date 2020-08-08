@@ -43,8 +43,12 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - run: cargo build --release
-      - run: |
+      - name: Run cargo build
+        run: |
+          cargo build --release
+
+      - name: Show artifacts
+        run: |
           ls -alh target/release
           file target/release/renga-service
 
@@ -68,10 +72,13 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-musl-${{ hashFiles('**/Cargo.lock') }}
 
-      - run: |
+      - name: Run cargo build
+        run: |
           cargo build \
             --target=x86_64-unknown-linux-musl \
             --release
-      - run: |
+
+      - name: Show artifacts
+        run: |
           ls -alh target/x86_64-unknown-linux-musl/release
           file target/x86_64-unknown-linux-musl/release/renga-service
