@@ -2,6 +2,7 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use actix_web::get;
 use serde::Deserialize;
 use chrono::{DateTime, Utc};
+use std::env;
 
 #[derive(Deserialize)]
 struct Greeting {
@@ -36,6 +37,7 @@ async fn hello(greeting: web::Path<Greeting>) -> actix_web::Result<String> {
 async fn main() -> std::io::Result<()> {
     println!("running...");
 
+    let port = env::var("RENGA_PORT").unwrap_or("8088".to_string());
     HttpServer::new(|| {
         App::new()
             .route("/", web::get().to(index))
@@ -43,7 +45,7 @@ async fn main() -> std::io::Result<()> {
             .service(index3)
             .route("/hello/{name}", web::get().to(hello))
     })
-        .bind("127.0.0.1:8088")?
+        .bind(format!("127.0.0.1:{}", port))?
         .run()
         .await
 }
